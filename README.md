@@ -1,4 +1,4 @@
-#AMA 3011 Halley's Comet Project
+# AMA 3011 Halley's Comet Project
 
 This project aims to compare the analytical solutions of the orbit of Halley's comet to discrete timestep computaional problems.
 
