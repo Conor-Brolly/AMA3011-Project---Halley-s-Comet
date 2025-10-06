@@ -10,5 +10,5 @@ struct Particle {
 //Solver for this project considers the interaction between two particles
 class Solver {
 public:
-	virtual void update(Particle* p1, Particle* p2, double dt);
+	virtual void update(Particle* p1, Particle* p2, double dt) {};
 };

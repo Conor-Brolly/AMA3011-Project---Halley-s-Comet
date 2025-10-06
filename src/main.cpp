@@ -7,19 +7,23 @@ int main()
     auto window = sf::RenderWindow(sf::VideoMode({1024u, 1024u}), "AMA3011 Halley's Comet");
     window.setFramerateLimit(144);
 
+    //DE solver
+    Solver* euler = new EulerSolver();
 
     //Particle system
-    Particle Sun = { true, 100, 256, 512, 0, 0 };
-    Particle Comet = { false, 10, 768, 512, 0, 5 };
+    Particle Sun = { true, 10000000000, 512, 512, 0, 0 };
+    Particle Comet = { false, 10000000, 768, 512, 0, 5 };
 
     //Display Variables
-    sf::CircleShape sunCircle(Sun.mass);
-    sunCircle.setOrigin({ (float)Sun.mass, (float)Sun.mass });
+    sf::CircleShape sunCircle(100.0f);
+    sunCircle.setOrigin({ 100.0f, 100.0f });
     sunCircle.setFillColor(sf::Color(255, 255, 0));
 
-    sf::CircleShape cometCircle(Comet.mass);
-    cometCircle.setOrigin({ (float)Comet.mass, (float)Comet.mass });
+    sf::CircleShape cometCircle(10.0f);
+    cometCircle.setOrigin({ 10.0f, 10.0f });
     cometCircle.setFillColor(sf::Color(0, 255, 255));
+
+
     //Main Loop
     while (window.isOpen())
     {
@@ -31,7 +35,8 @@ int main()
             }
         }
 
-
+        //Updates positions and velocities
+        euler->update(&Sun, &Comet, 0.01);
 
         window.clear();
         //Displays Sun and Comet as circles
