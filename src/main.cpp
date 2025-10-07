@@ -1,8 +1,23 @@
 #include <SFML/Graphics.hpp>
+#include <string>
 #include "EulerSolver.h"
 
 #define SCREEN_WIDTH 2048u
 #define SCREEN_HEIGHT 1024u
+
+std::string displayData(Particle Sun, Particle Comet, double time) {
+    std::string output = "";
+
+    output += "Time (years):\t" + std::to_string(time / 3.16e7);
+
+    double speed = sqrt(pow(Comet.Vx, 2) + pow(Comet.Vy, 2));
+    output += "\nSpeed (m/s^):\t" + std::to_string(speed);
+
+    double distance = sqrt(pow(Comet.x - Sun.x, 2) + pow(Comet.y - Sun.y, 2));
+    output += "\nDistance (km):\t" + std::to_string(distance/1000);
+
+    return output;
+}
 
 int main()
 {
@@ -12,9 +27,9 @@ int main()
 
     //DE solver
     Solver* euler = new EulerSolver();
+    double time = 0.0;
+    double timestep = 50000;//(seconds)
 
-    //Scaling to real-world distances
-    //Starts at y=0, so scale based on x
     double initialDistance = 5.2e12;//Distance of halleys comet at apoapsis
     
     //Particle system
@@ -30,6 +45,15 @@ int main()
     cometCircle.setOrigin({ 4.0f, 4.0f });
     cometCircle.setFillColor(sf::Color(0, 255, 255));
 
+    sf::Font font;
+    if (!font.openFromFile("Fonts/ARLRDBD.ttf"))//Requires Font folder stored in exe build folder
+    {
+        window.close();
+    }
+    sf::Text textData(font);
+    textData.setCharacterSize(32);
+    textData.setFillColor(sf::Color(255, 255, 255));
+
 
     //Main Loop
     while (window.isOpen())
@@ -43,10 +67,15 @@ int main()
         }
 
         //Updates positions and velocities
-        for (int i=0; i<1; i++)
-            euler->update(&Sun, &Comet, 500000);//Time in seconds
-        //window.clear();
-         
+        for (int i = 0; i < 1; i++) {
+            euler->update(&Sun, &Comet, timestep);
+            time += timestep;
+        }
+        
+        
+        //
+        //___________________________Drawing to the screen___________________________
+        window.clear();
          
         
         //Displays Sun and Comet as circles
@@ -60,6 +89,11 @@ int main()
                                 (float)(0.5 * SCREEN_HEIGHT + (Comet.y * SCREEN_WIDTH * 0.8 / initialDistance)) });
         window.draw(cometCircle);
 
+        //Displays Data
+        textData.setString(displayData(Sun, Comet, time));
+        window.draw(textData);
+
         window.display();
+        
     }
 }
