@@ -12,25 +12,22 @@ public:
 
 	void update(Particle* Sun, Particle*Comet, double dt) override {
 		
-		//Vector between particles (from comet to sun)
-		double xDist = Sun->x - Comet->x;
-		double yDist = Sun->y - Comet->y;
-
-		double r = sqrt(pow(xDist, 2) + pow(yDist, 2));
-
-		//Acceleration magnitude + components
-		double Acc = G * Sun->mass / (r * r);
-
-		double xAcc = Acc * xDist / r;
-		double yAcc = Acc * yDist / r;
+		Vector acc = getAcceleration(Sun, Comet);
 
 		//Applying force
-		Comet->Vx += dt * xAcc;
-		Comet->Vy += dt * yAcc;
-
+		Comet->vel += acc * dt;
 		//Updating position
-		Comet->x += Comet->Vx * dt;
-		Comet->y += Comet->Vy * dt;
+		Comet->pos += Comet->vel * dt;
+	}
+
+	void updateAsteroid(Particle* Sun, Particle* Comet, double minR, double maxR, double dt) override {
+
+		Vector acc = getAccelerationAsteroidField(Sun, Comet, minR, maxR);
+
+		//Applying force
+		Comet->vel += acc * dt;
+		//Updating position
+		Comet->pos += Comet->vel * dt;
 	}
 };
 
