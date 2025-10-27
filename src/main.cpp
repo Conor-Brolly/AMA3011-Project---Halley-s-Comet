@@ -4,6 +4,7 @@
 #include "RungeKuttaSolver.h"
 #include "CentralFieldEqs.h"
 #include "AsteroidDragEqs.h"
+#include "AsteroidDeflectEqs.h"
 
 #define SCREEN_WIDTH 2048u
 #define SCREEN_HEIGHT 1024u
@@ -18,7 +19,7 @@ void runProgram(bool asteroid, bool traces)
     Solver* rungekutta = new RKSolver();
 
     double time = 0.0;
-    double timestep = 400000.0;//(seconds)
+    double timestep = 80000.0;//(seconds)
 
     double initialDistance = 5.2e12;//Distance of halleys comet at apoapsis
     double ScreenScaleFactor = 0.8 * SCREEN_WIDTH / initialDistance;
@@ -62,8 +63,8 @@ void runProgram(bool asteroid, bool traces)
         //Updates positions and velocities
         for (int i = 0; i < 1; i++) {
 
-            euler->update(timestep, &EulerComet, AsteroidDrag::dxdt, AsteroidDrag::dvdt);
-            rungekutta->update(timestep, &RungeKComet, AsteroidDrag::dxdt, AsteroidDrag::dvdt);
+            euler->update(timestep, &EulerComet, CentralField::dxdt, CentralField::dvdt);
+            rungekutta->update(timestep, &RungeKComet, AsteroidDeflect::dxdt, AsteroidDeflect::dvdt);
             time += timestep;
 
         }
