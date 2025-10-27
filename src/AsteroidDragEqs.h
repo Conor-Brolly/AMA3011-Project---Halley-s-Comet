@@ -7,7 +7,7 @@
 
 #define minAstRadius 4.0e11
 #define maxAstRadius 6.0e11
-#define dragC 0.0 //4.0e-14
+#define dragC 4.0e-14
 
 //Equation of motion: (d/dt)^2 of x = -GMr / |r|^3 + drag term
 //Conditional Drag term: -kv*|v|
